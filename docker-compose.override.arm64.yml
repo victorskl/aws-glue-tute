@@ -1,0 +1,13 @@
+# Just simply rename this file to 'docker-compose.override.yml' if you are on ARM or any setting override need
+#     cp docker-compose.override.arm64.yml docker-compose.override.yml
+#     docker compose up -d
+
+version: "3"
+
+services:
+
+  glue:
+    image: public.ecr.aws/glue/aws-glue-libs:glue_libs_3.0.0_image_01-arm64
+    environment:
+      AWS_PROFILE: dev
+      AWS_REGION: us-east-1

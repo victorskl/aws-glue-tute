@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+
+  glue:
+    image: public.ecr.aws/glue/aws-glue-libs:glue_libs_3.0.0_image_01
+    container_name: glue_jupyter_lab
+    command:
+      - /home/glue_user/jupyter/jupyter_start.sh
+    ports:
+      - "4040:4040"
+      - "18080:18080"
+      - "8998:8998"
+      - "8888:8888"
+    volumes:
+      - ~/.aws:/home/glue_user/.aws:ro
+      - ./workspace:/home/glue_user/workspace/jupyter_workspace/
+    environment:
+      AWS_PROFILE: dev
+      AWS_REGION: ap-southeast-2
+      DISABLE_SSL: true
