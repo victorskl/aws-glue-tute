@@ -1,56 +1,50 @@
 # AWS Glue tute
 
+Using Docker Container Image published at https://gallery.ecr.aws/glue/
+
+- https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-libraries.html#develop-local-docker-image
+- https://aws.amazon.com/blogs/big-data/develop-and-test-aws-glue-version-3-0-jobs-locally-using-a-docker-container/
+
+## Quickstart ETL
+
 ```
 docker compose up -d
 docker compose ps
 docker compose logs -f
 (ctrl+c)
 ```
-- Go to http://localhost:8888
 
-### Makefile
+### Console
 
-Alternatively, use `make` based dev workflow
-
+- Login to glue container terminal 
 ```
-make up
-make ps
-make logs
-make start
-make enter
-make down
-...
+docker compose exec -it glue bash
 ```
-- Look [Makefile](Makefile) targets for more dev routines
 
-## Quickstart
-
+- Navigate to workspace folder and run Spark job script
 ```
-make enter
-cd jupyter_workspace
+cd jupyter_workspace/quickstart_etl
 spark-submit quickstart.py
 ```
 
-## JupyterLab
+### Notebook
 
-- Go to [JupyterLab UI](http://localhost:8888/lab), `File > New > Terminal`
+At JupyterLab UI (http://localhost:8888/lab)
 
-```
-jupyter kernelspec list
-```
+- Menu: `File > Open from Path...` and, enter `quickstart.ipynb` when prompt.
+- Menu: `Kernel > Change Kernel...` and, select `PySpark` kernel from dropdown list.
 
-```
-pyspark
->>> exit()
-```
+## Sample ETL
 
-### Sample ETL
+This `sample_etl` folder contains Glue job script and, run it as headless scenario. 
 
 ```
 cd jupyter_workspace/sample_etl
 spark-submit sample.py
 pytest
 ```
+
+## Other Notes
 
 ### AWS
 
@@ -61,14 +55,28 @@ aws sts get-caller-identity
 aws s3 ls s3://awsglue-datasets/examples/us-legislators/all/persons.json
 ```
 
-- If you get any error from above AWS commands, probably revisit [docker-compose.yml](docker-compose.yml) to check that you do have `AWS_PROFILE` called `dev` and, set the right `AWS_REGION` to your case.
+- If you get any error from above AWS commands, probably revisit Docker [compose.yml](compose.yml) to check that you do have `AWS_PROFILE` called `dev` and, set the right `AWS_REGION` to your case.
 
-- You can use [docker-compose.override.arm64.yml](docker-compose.override.arm64.yml) to override settings specific to your case.
+- You can use [compose override](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/) `compose.override.yml` file that suit to your case.
 
+### PySpark
 
-### Quickstart Notebook
+- Go to JupyterLab UI (http://localhost:8888/lab)
+- `File > New > Terminal`
 
-At [JupyterLab UI](http://localhost:8888/lab)
+```
+jupyter kernelspec list
+```
 
-- Menu: `File > Open from Path...` and, enter `quickstart.ipynb` when prompt.
-- Menu: `Kernel > Change Kernel...` and, select `PySpark` kernel from dropdown list.
+```
+pyspark
+>>> exit()
+```
+
+### PyCharm
+
+_Developing scripts using development endpoints_
+
+- https://docs.aws.amazon.com/glue/latest/dg/dev-endpoint.html
+- https://docs.aws.amazon.com/glue/latest/dg/dev-endpoint-tutorial-pycharm.html
+- https://www.jetbrains.com/help/pycharm/big-data-tools-aws-glue.html
